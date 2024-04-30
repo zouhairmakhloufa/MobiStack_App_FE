@@ -11,9 +11,17 @@ export default function AddQuestion() {
     const [name, setName] = useState("");
     const [type, setType] = useState("");
 
+
+
+
+
     const handleEditorChange = (state) => {
         setEditorState(state);
     };
+
+
+
+
 
     const uploadCallback = (file) => {
         return new Promise((resolve, reject) => {
@@ -33,6 +41,7 @@ export default function AddQuestion() {
     const handleAddQuestion = () => {
         const contentState = editorState.getCurrentContent();
         const rawContentState = convertToRaw(contentState);
+        console.log("rawContentState",rawContentState);
         let data = {
             name: name,
             type: type,
@@ -61,7 +70,7 @@ export default function AddQuestion() {
                                 <Label className='form-label' for='nameVertical'>
                                     Question Name
                                 </Label>
-                                <Input onChange={(e) => setName(e.target.value)} type='text' name='name' id='nameVertical' placeholder='Qestion Name' />
+                                <Input onChange={(e) => setName(e.target.value)} type='text' name='name' id='nameVertical' placeholder='First Name' />
                             </Col>
                             <Col sm='12' className='mb-1'>
                                 <Label className='form-label' for='select-basic'>
@@ -77,7 +86,7 @@ export default function AddQuestion() {
                             </Col>
 
 
-                            <Col sm='12' className='mb-1'>
+                            <Col sm='12' className='mb-3'>
                                 <Editor
                                     editorState={editorState}
                                     onEditorStateChange={handleEditorChange}
@@ -90,13 +99,14 @@ export default function AddQuestion() {
                                             previewImage: false,
                                             inputAccept: 'image/gif,image/jpeg,image/jpg,image/png,image/svg',
                                             alt: { present: false, mandatory: false },
-                                            defaultSize: { height: 400, width: 400 },
+                                            defaultSize: { height: 'auto', width: 'auto' },
                                         },
                                     }}
                                 />
                             </Col>
+                            
                             <Col sm='12'>
-                                <div className='d-flex'>
+                                <div className='d-flex '>
                                     <Button color='primary' onClick={handleAddQuestion}>
                                         Add Question
                                     </Button>

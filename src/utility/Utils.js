@@ -81,7 +81,7 @@ export const getUserData = () => {
  */
 export const getHomeRouteForLoggedInUser = (userRole) => {
   if (userRole === "admin") return DefaultRoute
-  if (userRole === "user") return "/second-page"
+  if (userRole === "user") return "/dashboard"
   return "/login"
 }
 

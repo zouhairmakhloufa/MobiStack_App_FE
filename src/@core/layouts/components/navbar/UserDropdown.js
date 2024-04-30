@@ -25,12 +25,15 @@ import {
 } from "reactstrap"
 
 // ** Default Avatar Image
-import defaultAvatar from "@src/assets/images/portrait/small/zouhair.jpg"
+import defaultAvatar from "@src/assets/images/portrait/small/avatar-s-11.jpg"
 import { getUserData } from "@utils"
 
 const UserDropdown = () => {
   const user = getUserData()
 
+  const logout =()=>{
+    localStorage.removeItem('userData')
+  }
   return (
     <UncontrolledDropdown tag="li" className="dropdown-user nav-item">
       <DropdownToggle
@@ -40,41 +43,26 @@ const UserDropdown = () => {
         onClick={(e) => e.preventDefault()}
       >
         <div className="user-nav d-sm-flex d-none">
-          <h5 className="user-name fw-bold">{user?.firstName + ' ' + user?.lastName}</h5>
-          <h5 className="user-status">{user?.role}</h5>
+          <span className="user-name fw-bold">{user?.firstName +' ' +user?.lastName}</span>
+          <span className="user-status">{user?.role}</span>
         </div>
         <Avatar
-          img={defaultAvatar}
-          imgHeight="50"
-          imgWidth="50"
+          img={user?.avatar ||defaultAvatar}
+          imgHeight="40"
+          imgWidth="40"
           status="online"
         />
       </DropdownToggle>
       <DropdownMenu end>
-        <DropdownItem tag={Link} to="/" onClick={(e) => e.preventDefault()}>
+        <DropdownItem tag={Link} to="/edit-profile">
           <User size={14} className="me-75" />
           <span className="align-middle">Profile</span>
-        </DropdownItem>
-
-        <DropdownItem tag={Link} to="/" onClick={(e) => e.preventDefault()}>
-          <CheckSquare size={14} className="me-75" />
-          <span className="align-middle">Tasks</span>
-        </DropdownItem>
-        <DropdownItem tag={Link} to="/" onClick={(e) => e.preventDefault()}>
-          <MessageSquare size={14} className="me-75" />
-          <span className="align-middle">Chats</span>
-        </DropdownItem>
+        </DropdownItem >
+     
         <DropdownItem divider />
-        <DropdownItem
-          tag={Link}
-          to="/pages/"
-          onClick={(e) => e.preventDefault()}
-        >
-          <Settings size={14} className="me-75" />
-          <span className="align-middle">Settings</span>
-        </DropdownItem>
-
-        <DropdownItem tag={Link} to="/login">
+       
+      
+        <DropdownItem tag={Link} onClick={logout} to="/login">
           <Power size={14} className="me-75" />
           <span className="align-middle">Logout</span>
         </DropdownItem>

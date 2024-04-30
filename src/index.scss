@@ -1,2 +1,10 @@
 @import '../node_modules/prismjs/themes/prism-tomorrow';
 @import './assets/scss/app.scss';
+
+
+.card-title-truncate {
+    height: 40px;  /* Adjust as needed to set a consistent height */
+    overflow: hidden;  /* Hide text that overflows */
+    white-space: nowrap;  /* Keep text on a single line */
+    text-overflow: ellipsis;  /* Add ellipsis for truncated text */
+}

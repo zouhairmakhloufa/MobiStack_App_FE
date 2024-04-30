@@ -39,6 +39,7 @@ import { useNavbarColor } from "@hooks/useNavbarColor"
 // ** Styles
 import "@styles/base/core/menu/menu-types/vertical-menu.scss"
 import "@styles/base/core/menu/menu-types/vertical-overlay-menu.scss"
+import { getUserData } from "../../utility/Utils"
 
 const VerticalLayout = (props) => {
   // ** Props
@@ -53,6 +54,7 @@ const VerticalLayout = (props) => {
   const { layout, setLayout, setLastLayout } = useLayout()
 
   // ** States
+  const [newMenuData, setnewMenuData] = useState([])
   const [isMounted, setIsMounted] = useState(false)
   const [menuVisibility, setMenuVisibility] = useState(false)
   const [windowWidth, setWindowWidth] = useState(window.innerWidth)
@@ -82,6 +84,19 @@ const VerticalLayout = (props) => {
   const setIsHidden = (val) => dispatch(handleMenuHidden(val))
 
   //** This function will detect the Route Change and will hide the menu on menu item click
+  useEffect(() => {
+
+    let newMenu=[]
+    const userData=getUserData()
+    for (let i = 0; i < menuData.length; i++) {
+      if (menuData[i].role.includes(userData.role)) {
+        newMenu.push(menuData[i])
+      }
+      
+    }
+ 
+    setnewMenuData(newMenu)
+  }, [menuData])
   useEffect(() => {
     if (menuVisibility && windowWidth < 1200) {
       setMenuVisibility(false)
@@ -153,7 +168,7 @@ const VerticalLayout = (props) => {
         <SidebarComponent
           skin={skin}
           menu={menu}
-          menuData={menuData}
+          menuData={newMenuData}
           menuCollapsed={menuCollapsed}
           menuVisibility={menuVisibility}
           setMenuCollapsed={setMenuCollapsed}

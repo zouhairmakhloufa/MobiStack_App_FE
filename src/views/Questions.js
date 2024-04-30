@@ -33,7 +33,7 @@ export default function Questions() {
     const [postsPerPage] = useState(6);
 
     useEffect(() => {
-        axios.get('http://localhost:5000/api/question/get')
+        axios.get('http://localhost:5000/api/question/getWithCommentCount')
             .then((res) => {
                 setData(res.data.data);
 
@@ -52,15 +52,14 @@ export default function Questions() {
 
     const renderRenderList = () => {
 
-        return currentPosts && currentPosts.map(item => {
+        return currentPosts && currentPosts.map((item ,idx) => {
 
 
             return (
-                <Col key={item.title} md='6'>
-                    <Card>
-
+                <Col key={idx} md='6'>
+                    <Card className='match-height' >
                         <CardBody>
-                            <CardTitle tag='h4'>
+                            <CardTitle tag='h4'  className="card-title-truncate" style={{ minHeight:"50px" }}>
                                 <Link className='blog-title-truncate text-body-heading' to={`/question-detail/${item._id}`}>
                                     {item.name}
                                 </Link>
@@ -95,7 +94,7 @@ export default function Questions() {
                             <div className='d-flex justify-content-between align-items-center'>
                                 <Link to={`/question-detail/${item._id}`}>
                                     <MessageSquare size={15} className='text-body me-50' />
-                                    <span className='text-body fw-bold'>300 Comments</span>
+                                    <span className='text-body fw-bold'>{item.commentCount} Comments</span>
                                 </Link>
                                 <Link className='fw-bold' to={`/question-detail/${item._id}`}>
                                     Read More
@@ -115,7 +114,7 @@ export default function Questions() {
                     <div className='content-body'>
                         {data !== null ? (
                             <div className='blog-list-wrapper'>
-                                <Row>{renderRenderList()}</Row>
+                                <Row >{renderRenderList()}</Row>
                                 <Row>
                                     <Col sm='12'>
                                         <Pagination className='d-flex justify-content-center mt-2'>

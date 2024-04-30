@@ -13,10 +13,11 @@ import PublicRoute from "@components/routes/PublicRoute"
 // ** Utils
 import { isObjEmpty } from "@utils"
 import { isUserLoggedIn } from "../../utility/Utils"
-import Login from "../../views/Login"
-import AddQuestion from "../../views/AddQuestion"
-import QuestionDetail from "../../views/QuestionDetail"
-import Questions from "../../views/Questions"
+
+
+
+
+
 
 const getLayout = {
   blank: <BlankLayout />,
@@ -28,11 +29,17 @@ const getLayout = {
 const TemplateTitle = "%s - Vuexy React Admin Template"
 
 // ** Default Route
-const DefaultRoute = "/home"
+const DefaultRoute = "/dashboardAdmin"
 
-const Home = lazy(() => import("../../views/Home"))
-const SecondPage = lazy(() => import("../../views/SecondPage"))
-
+const Login = lazy(() => import("../../views/Login"))
+const Dashboard = lazy(() => import("../../views/Dashboard"))
+const DashboardAdmin = lazy(() => import("../../views/DashboardAdmin"))
+const AddQuestion = lazy(() => import("../../views/AddQuestion"))
+const QuestionDetail = lazy(() => import("../../views/QuestionDetail"))
+const Questions = lazy(() => import("../../views/Questions"))
+const EditProfile = lazy(() => import("../../views/EditProfile"))
+const TableUsers = lazy(() => import("../../views/TableUsers"))
+const TableQuestion = lazy(() => import("../../views/TableQuestion"))
 
 
 // ** Merge Routes
@@ -40,27 +47,58 @@ const Routes = [
   {
     path: "/",
     index: true,
-    element: <Navigate replace to={DefaultRoute} />
+    element: <Navigate replace to={DefaultRoute} />,
+    role:['admin','user']
   },
   {
-    path: "/home",
-    element: isUserLoggedIn() ?<Home /> : <Login/>
+    path: "/dashboardAdmin",
+    element: isUserLoggedIn() ? <DashboardAdmin /> : <Login/>,
+    role:['admin']
+
+  },
+  {
+    path: "/dashboard",
+    element: isUserLoggedIn() ?<Dashboard /> : <Login/>,
+    role:['user']
+
   },
   {
     path: "/questions",
-    element: isUserLoggedIn() ?<Questions /> : <Login/>
+    element: isUserLoggedIn() ?<Questions /> : <Login/>,
+    role:['admin','user']
+
   },
   {
     path: "/add-question",
-    element: isUserLoggedIn() ?<AddQuestion /> : <Login/>
+    element: isUserLoggedIn() ?<AddQuestion /> : <Login/>,
+    role:['user']
+
   },
   {
     path: "/question-detail/:id",
-    element: isUserLoggedIn() ?<QuestionDetail /> : <Login/>
+    element: isUserLoggedIn() ?<QuestionDetail /> : <Login/>,
+    role:['admin','user']
+
   },
   {
-    path: "/second-page",
-    element: isUserLoggedIn() ?<SecondPage /> : <Login/>
+    path: "/edit-profile",
+    element: isUserLoggedIn() ?<EditProfile /> : <Login/>,
+    role:['user']
+
+
+  },
+  {
+    path: "/users",
+    element: isUserLoggedIn() ?<TableUsers /> : <Login/>,
+    role:['user']
+
+
+  },
+  {
+    path: "/table-question",
+    element: isUserLoggedIn() ?<TableQuestion /> : <Login/>,
+    role:['user','admin']
+
 
   },
 
@@ -127,6 +165,7 @@ const getRoutes = (layout) => {
 
   layouts.forEach((layoutItem) => {
     const LayoutRoutes = MergeLayoutRoutes(layoutItem, defaultLayout)
+
 
     AllRoutes.push({
       path: "/",
