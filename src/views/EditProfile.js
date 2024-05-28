@@ -85,6 +85,7 @@ export default function EditProfile() {
                                     id="register-firstName"
                                     placeholder="johndoe"
                                     autoFocus
+                                    name="firstName"
                                     value={user.firstName}
                                     onChange={handleInputChange}
 
@@ -99,6 +100,8 @@ export default function EditProfile() {
                                     id="register-lastName"
                                     placeholder="deLpie"
                                     autoFocus
+                                    name="lastName"
+
                                     value={user.lastName}
                                     onChange={handleInputChange}
 
@@ -115,13 +118,14 @@ export default function EditProfile() {
                                     placeholder="john@example.com"
                                     value={user.email}
                                     onChange={handleInputChange}
+                                    name="email"
 
 
                                 />
                             </div>
                             <div className="mb-1">
                                 <Label className="form-label" for="register-email">
-                                    image
+                                    Avatar
                                 </Label>
                                 <Input
                                     type="file"

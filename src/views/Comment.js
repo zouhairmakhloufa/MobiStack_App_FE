@@ -8,7 +8,6 @@ export default function Comment({ comment }) {
     const [editorState, setEditorState] = useState(EditorState.createEmpty());
 
     useEffect(() => {
-        console.log("comment",comment);
         if (comment?.blocks && comment?.entityMap !== undefined) {
             const contentState = convertFromRaw(comment);
             const newEditorState = EditorState.createWithContent(contentState,decorator);

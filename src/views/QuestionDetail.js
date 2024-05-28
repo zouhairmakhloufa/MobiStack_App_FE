@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Editor } from 'react-draft-wysiwyg'
-import { Card, CardBody, Button, Row, Col, Input, Form } from 'reactstrap'
+import { Card, CardHeader, CardTitle, CardBody, Button, Row, Col, Input, Label, Form } from 'reactstrap'
 import '@styles/react/libs/editor/editor.scss'
 import axios from 'axios'
 import { EditorState, convertFromRaw, convertToRaw } from 'draft-js';
@@ -8,8 +8,14 @@ import { useParams } from 'react-router-dom'
 import { getUserData } from '../utility/Utils';
 import CardAction from '@components/card-actions'
 import Comment from './Comment'
+import { Check } from 'react-feather'
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
+const MySwal = withReactContent(Swal)
 
 export default function QuestionDetail() {
+    const user = getUserData()
+
     const [question, setQuestion] = useState({})
     const [comments, setComments] = useState([]);
 
@@ -74,12 +80,58 @@ export default function QuestionDetail() {
         })
 
     }
+    const trustedComment = (comment) => {
+        console.log("..........", comment);
+        if (comment.user_id._id === user.id) {
+            MySwal.fire({
+                title: 'Are you sure?',
+                text: "Do you trust this comment or not?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, I trust it!',
+                cancelButtonText: 'No, I don\'t trust it',
+                customClass: {
+                    confirmButton: 'btn btn-primary',
+                    cancelButton: 'btn btn-danger ms-1'
+                },
+                buttonsStyling: false
+            }).then(function (result) {
+                if (result.isConfirmed) {
+                    comment.trusted = true
+                    axios.put('http://localhost:5000/api/comment/update', comment).then((res) => {
+                        console.log(res.data);
+                    })
+                    MySwal.fire({
+                        icon: 'success',
+                        title: 'Comment Trusted',
+                        text: 'You have marked this comment as trusted.',
+                        customClass: {
+                            confirmButton: 'btn btn-success'
+                        }
+                    })
+                } else if (result.dismiss === MySwal.DismissReason.cancel) {
+                    MySwal.fire({
+                        title: 'Cancelled',
+                        text: 'You have marked this comment as not trusted.',
+                        icon: 'error',
+                        customClass: {
+                            confirmButton: 'btn btn-success'
+                        }
+                    })
+                }
+            })
+        }
+
+
+
+
+    }
 
     return (
         <div>
             <Row>
                 <Col sm='12'>
-                    <h1 className='section-label'>Question</h1>
+                    <h6 className='section-label'>Question</h6>
                     <CardAction
                         title={question.name}
                         actions={['collapse']}
@@ -94,26 +146,46 @@ export default function QuestionDetail() {
                                 readOnly={true}
                                 toolbarHidden={true}
                             />
+
+
+
+
+
                         </CardBody>
                     </CardAction>
 
                 </Col>
 
                 <Col sm='12'>
-                    <h3 className='section-label'>COMMENT</h3>
+                    <h6 className='section-label'>COMMENT</h6>
                     {comments && comments.map((value, idx) => (
 
-                        <CardAction
-                            title={value.name}
-                            actions={['collapse']}
+                        <Row>
+                            <Col sm='1'>
+                                <div className='h-100 d-flex justify-content-center align-items-center'>
+                                    <div className={`avatar p-50 m-0 mb-1 ${value?.trusted ? `bg-light-success` : "bg-light-secondary"
+                                        }`} >
+                                        <Check size={28} onClick={() => trustedComment(value)} />
+                                    </div>
+                                </div>
+                            </Col>
 
-                            key={idx}
-                        >
+                            <Col sm='11'>
+                                <CardAction
+                                    title={value.name}
+                                    actions={['collapse']}
+                                    key={idx}
+                                >
 
-                            <CardBody>
-                                <Comment comment={value.commentContent} />
-                            </CardBody>
-                        </CardAction>
+                                    <CardBody>
+                                        <Comment comment={value.commentContent} />
+                                    </CardBody>
+                                </CardAction>
+                            </Col>
+
+
+                        </Row>
+
                     ))}
 
 

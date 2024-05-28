@@ -1,12 +1,26 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react'
-import {Card,CardHeader,CardBody,CardTitle,Label,Input,Row,Col,Button,} from 'reactstrap';
+import React, { Fragment, useEffect, useState } from 'react'
+import {
+  Card,
+  CardHeader,
+  CardBody,
+  CardTitle,
+  Label,
+  Input,
+  Row,
+  Col,
+  Button,
+} from 'reactstrap';
 import DataTable from 'react-data-table-component';
-import { ChevronDown, Trash } from 'react-feather';
+import { Check, ChevronDown, Trash } from 'react-feather';
+import defaultAvatar from "@src/assets/images/portrait/small/avatar-s-11.jpg"
 import Swal from 'sweetalert2'; // Pour la confirmation avant suppression
 import '@styles/react/libs/tables/react-dataTable-component.scss'
+import { getUserData } from '../utility/Utils';
 
 export default function TableQuestion() {
+
+  const user = getUserData()
 
   const [questions, setQuestions] = useState([]);
   const [filteredQuestions, setFilteredQuestions] = useState([]);
@@ -21,16 +35,30 @@ export default function TableQuestion() {
   const getAllQuestion = () => {
     axios.get('http://localhost:5000/api/question/getWithCommentCount')
       .then((res) => {
-        setQuestions(res.data.data);
-        setFilteredQuestions(res.data.data);
+        if (user.role==="admin") {
+          setQuestions(res.data.data);
+          setFilteredQuestions(res.data.data);
+        }else{
+          console.log(user);
+          let newQuestion=[]
+          for (let i = 0; i < res.data.data.length; i++) {
+            console.log(res.data.data[i].user_id._id);
 
+            if (res.data.data[i].user_id._id ===user.id) {
+              newQuestion.push(res.data.data[i])
+            }
+            
+          }
+          setQuestions(newQuestion);
+          setFilteredQuestions(newQuestion);
 
-        console.log(res.data.data);
-      })
+        }
+             })
       .catch((error) => {
         console.error('Error fetching users:', error);
       });
   }
+
 
   const confirmDelete = (questionId) => {
     Swal.fire({
@@ -95,6 +123,10 @@ export default function TableQuestion() {
     );
   };
 
+
+
+
+
   const columns = [
     { name: 'Question Name', selector: (row) => row.name, sortable: true },
     { name: 'Question Type', selector: (row) => row.type, sortable: true },
@@ -102,6 +134,20 @@ export default function TableQuestion() {
     {
       name: 'User',
       selector: (row) => `${row.user_id.firstName} ${row.user_id.lastName}`,
+      sortable: true,
+    },
+    {
+      name: 'Trusted Replied',
+      selector: (row) => (
+        <Fragment>
+              <div className='h-100 d-flex justify-content-center align-items-center'>
+                                    <div className={`avatar p-50 m-0 mb-1 ${row.hasTrustedComment ? `bg-light-success` : "bg-light-secondary"
+                                        }`} >
+                                        <Check size={18}  />
+                                    </div>
+                                </div>
+        </Fragment>
+      ) ,
       sortable: true,
     },
     {
@@ -136,7 +182,7 @@ export default function TableQuestion() {
               placeholder="Saisissez le nom de la question"
             />
           </Col>
-          <Col>FF
+          <Col>
             <Label>Filtre par Nom de l'Utilisateur</Label>
             <Input
               type="text"

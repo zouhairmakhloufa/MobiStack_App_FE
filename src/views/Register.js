@@ -1,44 +1,65 @@
 // ** React Imports
 import { Link } from "react-router-dom"
+
 // ** Custom Hooks
 import { useSkin } from "@hooks/useSkin"
+
+// ** Icons Imports
 import { Facebook, Twitter, Mail, GitHub } from "react-feather"
+
+// ** Custom Components
 import InputPasswordToggle from "@components/input-password-toggle"
 import toast from 'react-hot-toast'
-import { Row, Col, CardTitle, CardText, Form, Label, Input, Button } from "reactstrap"
+
+// ** Reactstrap Imports
+import {
+  Row,
+  Col,
+  CardTitle,
+  CardText,
+  Form,
+  Label,
+  Input,
+  Button
+} from "reactstrap"
+
+// ** Styles
 import "@styles/react/pages/page-authentication.scss"
 import axios from "axios"
-import { useNavigate } from 'react-router-dom'
+import {useNavigate}from 'react-router-dom'
 
 const Register = () => {
   // ** Hooks
   const { skin } = useSkin()
-  const navigate = useNavigate()
+  const  navigate  = useNavigate()
 
   const illustration =
     skin === "dark" ? "register-v2-dark.svg" : "register-v2.svg",
     source = require(`@src/assets/images/pages/${illustration}`).default
 
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const formData = {
-      firstName: event.target.elements["register-firstName"].value,
-      lastName: event.target.elements["register-lastName"].value,
-      email: event.target.elements["register-email"].value,
-      password: event.target.elements["register-password"].value,
-      role: 'user',
-    };
+    const handleSubmit = (event) => {
+      event.preventDefault();
+      const formData = {
+        firstName: event.target.elements["register-firstName"].value,
+        lastName: event.target.elements["register-lastName"].value,
+        email: event.target.elements["register-email"].value,
+        password: event.target.elements["register-password"].value,
+        role: 'user',
+      };
 
-    axios.post('http://localhost:5000/api/user/signup', formData).then((res) => {
-      if (res.data.message == "1") {
-        toast.success('User Added');
-        navigate('/login')
-      } else {
-        toast.error('Email already exists');
-      }
-    })
-  };
+      axios.post('http://localhost:5000/api/user/signup',formData).then((res)=>{
+        if (res.data.message=="1") {
+          toast.success('User Added');
+          navigate('/login')
+        } else {
+          toast.error('Email already exists');
+
+        }
+
+
+      })
+    };
 
   return (
     <div className="auth-wrapper auth-cover">
