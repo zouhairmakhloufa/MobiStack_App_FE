@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Button, Card, CardBody, CardText, CardTitle, Col, Form, Input, Label, Row } from 'reactstrap'
 import axios from 'axios'
 import { getUserData } from '../utility/Utils'
+import { useNavigate } from 'react-router-dom';
 export default function EditProfile() {
 
     const [user, setUser] = useState({
@@ -10,6 +11,7 @@ export default function EditProfile() {
         email: '',
     });
     const [avatar, setAvatar] = useState(null);
+    const navigate = useNavigate()
 
     const userData = getUserData()
 
@@ -56,6 +58,8 @@ export default function EditProfile() {
             .put('http://localhost:5000/api/user/update/' + userData?.id, formData)
             .then((res) => {
                 console.log('Profile updated successfully:', res.data);
+                localStorage.removeItem('userData')
+                navigate('/')
             })
             .catch((error) => {
                 console.error('Error updating profile:', error);

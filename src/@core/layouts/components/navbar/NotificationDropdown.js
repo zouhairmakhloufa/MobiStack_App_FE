@@ -27,6 +27,7 @@ import { Link, useNavigate } from "react-router-dom"
 const NotificationDropdown = () => {
 
   const [notification, setNotification] = useState([])
+  const user = getUserData()
 
 
   const navigate = useNavigate()
@@ -37,11 +38,14 @@ const NotificationDropdown = () => {
   }, [])
 
   const getAllNotification = () => {
-    const user = getUserData()
 
     axios.get('http://localhost:5000/api/notification/getByUserId/' + user.id).then((res) => {
 
       setNotification(res.data.data)
+
+      setTimeout(()=>{
+        getAllNotification()
+      },2000)
     })
   }
 
@@ -82,7 +86,7 @@ const NotificationDropdown = () => {
                 <Fragment>
                   <div className="me-1">
                     <Avatar
-                      img={item.user_added.avatar || defaultAvatar}
+                      img={item?.user_added?.avatar || defaultAvatar}
                       imgHeight="32"
                       imgWidth="32"
                     />
@@ -90,7 +94,7 @@ const NotificationDropdown = () => {
                   </div>
                   <div className="list-item-body flex-grow-1">
                     <h5>
-                      {item.user_added.firstName + ' ' + item.user_added.lastName} {" "}
+                      {item?.user_added?.firstName + ' ' + item?.user_added?.lastName} {" "}
                       <small className="notification-text">
                         has added {item.type === 'question' ? 'a new question' : 'a new comment'}
                       </small>

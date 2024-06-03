@@ -8,7 +8,7 @@ import { useParams } from 'react-router-dom'
 import { getUserData } from '../utility/Utils';
 import CardAction from '@components/card-actions'
 import Comment from './Comment'
-import { Check } from 'react-feather'
+import { Check, Trash } from 'react-feather'
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 const MySwal = withReactContent(Swal)
@@ -76,7 +76,9 @@ export default function QuestionDetail() {
             question_id: params.id
         }
         axios.post('http://localhost:5000/api/comment/add', data).then((res) => {
-            console.log(res.data);
+            getQuestionById()
+            setName('');
+            setEditorState(EditorState.createEmpty());
         })
 
     }
@@ -127,6 +129,40 @@ export default function QuestionDetail() {
 
     }
 
+    const handleDeleteComment = (commentId) => {
+        MySwal.fire({
+            title: 'Are you sure?',
+            text: 'You won\'t be able to revert this!',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'No, cancel!',
+            customClass: {
+                confirmButton: 'btn btn-primary',
+                cancelButton: 'btn btn-danger ms-1'
+            },
+            buttonsStyling: false
+        }).then((result) => {
+            if (result.isConfirmed) {
+                axios.delete(`http://localhost:5000/api/comment/delete/${commentId}`)
+                    .then(() => {
+                        MySwal.fire({
+                            icon: 'success',
+                            title: 'Deleted!',
+                            text: 'The comment has been deleted.',
+                            customClass: {
+                                confirmButton: 'btn btn-success'
+                            }
+                        });
+                        getQuestionById();  // Refresh comments after deletion
+                    })
+                    .catch((error) => {
+                        console.error('Error deleting comment:', error);
+                    });
+            }
+        });
+    };
+
     return (
         <div>
             <Row>
@@ -170,7 +206,7 @@ export default function QuestionDetail() {
                                 </div>
                             </Col>
 
-                            <Col sm='11'>
+                            <Col sm={`${user.role === "admin" ? '10' : '11'}`}>
                                 <CardAction
                                     title={value.name}
                                     actions={['collapse']}
@@ -182,6 +218,16 @@ export default function QuestionDetail() {
                                     </CardBody>
                                 </CardAction>
                             </Col>
+                            {
+                                user.role === "admin" ? <Col sm='1'>
+                                    <div className='h-100 d-flex justify-content-center align-items-center'>
+
+                                        <Button color='danger' onClick={() => handleDeleteComment(value._id)}>
+                                            <Trash size={16} />
+                                        </Button>
+                                    </div>
+                                </Col> : null
+                            }
 
 
                         </Row>
@@ -199,7 +245,7 @@ export default function QuestionDetail() {
                                 <Row>
                                     <Col sm='12'>
                                         <div className='mb-2'>
-                                            <Input onChange={(e) => setName(e.target.value)} placeholder='Name' />
+                                            <Input onChange={(e) => setName(e.target.value)} value={name} placeholder='Name' />
                                         </div>
                                     </Col>
                                     <Col sm='12'>

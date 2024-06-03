@@ -5,12 +5,14 @@ import '@styles/react/libs/editor/editor.scss'
 import { EditorState, convertToRaw } from 'draft-js';
 import axios from 'axios'
 import { getUserData } from '../utility/Utils';
+import { useNavigate } from 'react-router-dom';
 export default function AddQuestion() {
 
     const [editorState, setEditorState] = useState(EditorState.createEmpty());
     const [name, setName] = useState("");
     const [type, setType] = useState("");
 
+    const navigate=useNavigate()
 
 
 
@@ -41,7 +43,6 @@ export default function AddQuestion() {
     const handleAddQuestion = () => {
         const contentState = editorState.getCurrentContent();
         const rawContentState = convertToRaw(contentState);
-        console.log("rawContentState",rawContentState);
         let data = {
             name: name,
             type: type,
@@ -50,6 +51,7 @@ export default function AddQuestion() {
         }
         axios.post('http://localhost:5000/api/question/add', data).then((res) => {
             console.log(res.data);
+            navigate('/questions')
         })
 
     }

@@ -1,5 +1,5 @@
 // ** React Imports
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 
 // ** Custom Components
 import Avatar from "@components/avatar"
@@ -29,10 +29,13 @@ import defaultAvatar from "@src/assets/images/portrait/small/avatar-s-11.jpg"
 import { getUserData } from "@utils"
 
 const UserDropdown = () => {
+  const navigate=useNavigate()
   const user = getUserData()
 
   const logout =()=>{
     localStorage.removeItem('userData')
+    navigate('/')
+    
   }
   return (
     <UncontrolledDropdown tag="li" className="dropdown-user nav-item">
