@@ -35,25 +35,25 @@ export default function TableQuestion() {
   const getAllQuestion = () => {
     axios.get('http://localhost:5000/api/question/getWithCommentCount')
       .then((res) => {
-        if (user.role==="admin") {
+        if (user.role === "admin") {
           setQuestions(res.data.data);
           setFilteredQuestions(res.data.data);
-        }else{
+        } else {
           console.log(user);
-          let newQuestion=[]
+          let newQuestion = []
           for (let i = 0; i < res.data.data.length; i++) {
             console.log(res.data.data[i].user_id._id);
 
-            if (res.data.data[i].user_id._id ===user.id) {
+            if (res.data.data[i].user_id._id === user.id) {
               newQuestion.push(res.data.data[i])
             }
-            
+
           }
           setQuestions(newQuestion);
           setFilteredQuestions(newQuestion);
 
         }
-             })
+      })
       .catch((error) => {
         console.error('Error fetching users:', error);
       });
@@ -140,14 +140,14 @@ export default function TableQuestion() {
       name: 'Trusted Replied',
       selector: (row) => (
         <Fragment>
-              <div className='h-100 d-flex justify-content-center align-items-center'>
-                                    <div className={`avatar p-50 m-0 mb-1 ${row.hasTrustedComment ? `bg-light-success` : "bg-light-secondary"
-                                        }`} >
-                                        <Check size={18}  />
-                                    </div>
-                                </div>
+          <div className='h-100 d-flex justify-content-center align-items-center'>
+            <div className={`avatar p-50 m-0 mb-1 ${row.hasTrustedComment ? `bg-light-success` : "bg-light-secondary"
+              }`} >
+              <Check size={18} />
+            </div>
+          </div>
         </Fragment>
-      ) ,
+      ),
       sortable: true,
     },
     {

@@ -55,21 +55,21 @@ export default function Questions() {
     const currentPosts = data && data.slice(indexOfFirstPost, indexOfLastPost);
 
 
-    const paginate =(value)=>{
+    const paginate = (value) => {
         setCurrentPage(value)
     }
 
 
     const renderRenderList = () => {
 
-        return currentPosts && currentPosts.map((item ,idx) => {
+        return currentPosts && currentPosts.map((item, idx) => {
 
 
             return (
                 <Col key={idx} md='6'>
                     <Card className='match-height' >
                         <CardBody>
-                            <CardTitle tag='h4'  className="card-title-truncate" style={{ minHeight:"50px" }}>
+                            <CardTitle tag='h4' className="card-title-truncate" style={{ minHeight: "50px" }}>
                                 <Link className='blog-title-truncate text-body-heading' to={`/question-detail/${item._id}`}>
                                     {item.name}
                                 </Link>

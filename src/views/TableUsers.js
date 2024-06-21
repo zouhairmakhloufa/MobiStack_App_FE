@@ -1,5 +1,5 @@
 import axios from 'axios'
-import React, { useEffect, useState } from 'react'
+import React, { Fragment, useEffect, useState } from 'react'
 import {
   Card,
   CardHeader,
@@ -15,14 +15,16 @@ import {
 
 } from "reactstrap"
 import DataTable from 'react-data-table-component'
-import { ChevronDown, Trash } from 'react-feather';
+import { ChevronDown, Edit, Trash } from 'react-feather';
 import defaultAvatar from "@src/assets/images/portrait/small/avatar-s-11.jpg"
 import Swal from 'sweetalert2'; // Pour la confirmation avant suppression
 import '@styles/react/libs/tables/react-dataTable-component.scss'
+import { useNavigate } from 'react-router-dom';
 
 
 export default function TableUsers() {
 
+  const navigate = useNavigate()
   const [users, setUsers] = useState([]);
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [searchEmail, setSearchEmail] = useState('');
@@ -41,7 +43,6 @@ export default function TableUsers() {
         setFilteredUsers(res.data.data);
 
 
-        console.log(res.data.data);
       })
       .catch((error) => {
         console.error('Error fetching users:', error);
@@ -140,14 +141,26 @@ export default function TableUsers() {
     {
       name: 'Actions',
       selector: (row) => (
-        <Button
-          className="btn btn-outline-danger"
-          color="light"
-          onClick={() => confirmDelete(row._id)}
-          size="sm"
-        >
-          <Trash size={16} />
-        </Button>
+        <div className='d-flex justify-content-center gap-1'>
+          <Button
+            className="btn btn-outline-danger"
+            color="light"
+            onClick={() => confirmDelete(row._id)}
+            size="sm"
+          >
+            <Trash size={16} />
+          </Button>
+
+          <Button
+            className="btn btn-outline-info mr-2"
+            color="light"
+            onClick={() => navigate('/edit-user/' + row._id)}
+            size="sm"
+          >
+            <Edit size={16} />
+          </Button>
+        </div>
+
       ),
       sortable: false,
     },

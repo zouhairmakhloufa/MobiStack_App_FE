@@ -10,9 +10,9 @@ export default function Comment({ comment }) {
     useEffect(() => {
         if (comment?.blocks && comment?.entityMap !== undefined) {
             const contentState = convertFromRaw(comment);
-            const newEditorState = EditorState.createWithContent(contentState,decorator);
+            const newEditorState = EditorState.createWithContent(contentState, decorator);
             setEditorState(newEditorState);
-        } 
+        }
     }, [comment]);
 
     return (

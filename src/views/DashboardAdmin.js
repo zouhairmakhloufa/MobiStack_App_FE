@@ -26,11 +26,11 @@ export default function DashboardAdmin() {
   const optionsC = {
     chart: {
       type: 'donut',
-  
+
     },
     colors: [donutColors.series1, donutColors.series2],
     plotOptions: {
-    
+
     },
     responsive: [{
       breakpoint: 480,
@@ -65,9 +65,9 @@ export default function DashboardAdmin() {
         setUserCount(data.users);
         setQuestionStats(data.question);
         setCommentStats(data.comment);
-        
 
-  setSeries([{name:'Questions' ,data:data.question.perMonth}])
+
+        setSeries([{ name: 'Questions', data: data.question.perMonth }])
       } catch (error) {
         console.error("Error fetching stats", error);
       }
@@ -141,11 +141,11 @@ export default function DashboardAdmin() {
       </Row>
 
       <Row>
-    
+
       </Row>
 
       <Row className='match-height'>
-      <Col xl='6' md='12' sm='12'>
+        <Col xl='6' md='12' sm='12'>
           <Card>
             <CardHeader className='d-flex flex-sm-row flex-column justify-content-md-between align-items-start justify-content-start'>
               <CardTitle tag='h4'>Questions Per Month</CardTitle>

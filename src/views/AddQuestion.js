@@ -12,7 +12,7 @@ export default function AddQuestion() {
     const [name, setName] = useState("");
     const [type, setType] = useState("");
 
-    const navigate=useNavigate()
+    const navigate = useNavigate()
 
 
 
@@ -106,7 +106,7 @@ export default function AddQuestion() {
                                     }}
                                 />
                             </Col>
-                            
+
                             <Col sm='12'>
                                 <div className='d-flex '>
                                     <Button color='primary' onClick={handleAddQuestion}>

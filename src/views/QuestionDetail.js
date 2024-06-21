@@ -83,7 +83,7 @@ export default function QuestionDetail() {
 
     }
     const trustedComment = (comment) => {
-       
+
         if (question.user_id === user.id) {
             MySwal.fire({
                 title: 'Are you sure?',

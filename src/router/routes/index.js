@@ -13,6 +13,7 @@ import PublicRoute from "@components/routes/PublicRoute"
 // ** Utils
 import { isObjEmpty } from "@utils"
 import { isUserLoggedIn } from "../../utility/Utils"
+import EditUser from "../../views/EditUser"
 
 
 
@@ -84,6 +85,13 @@ const Routes = [
     path: "/edit-profile",
     element: isUserLoggedIn() ?<EditProfile /> : <Login/>,
     role:['user']
+
+
+  },
+  {
+    path: "/edit-user/:id",
+    element: isUserLoggedIn() ?<EditUser /> : <Login/>,
+    role:['admin']
 
 
   },
